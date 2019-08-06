@@ -1,0 +1,40 @@
+/*
+    Programado por Luis Cabrera Benito 
+
+  ____          _____               _ _           _       
+ |  _ \        |  __ \             (_) |         | |      
+ | |_) |_   _  | |__) |_ _ _ __ _____| |__  _   _| |_ ___ 
+ |  _ <| | | | |  ___/ _` | '__|_  / | '_ \| | | | __/ _ \
+ | |_) | |_| | | |  | (_| | |   / /| | |_) | |_| | ||  __/
+ |____/ \__, | |_|   \__,_|_|  /___|_|_.__/ \__, |\__\___|
+         __/ |                               __/ |        
+        |___/                               |___/         
+    
+    
+    Blog:       https://parzibyte.me/blog
+    Ayuda:      https://parzibyte.me/blog/contrataciones-ayuda/
+    Contacto:   https://parzibyte.me/blog/contacto/
+*/
+img.card-img-top {
+    object-fit: cover;
+    cursor: pointer;
+    max-height: 150px !important;
+    max-width: 150px !important;
+}
+
+img.card-img-top.girar {
+    animation: fadein 2s;
+}
+
+@keyframes fadein {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+body {
+  /*Para la barra inferior fija*/
+  padding-bottom: 70px;
+}
