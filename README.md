@@ -4,6 +4,8 @@
 # Memorama con JavaScript
 Tutorial: [https://parzibyte.me/blog/2019/08/06/juego-memorama-javascript-tutorial/](https://parzibyte.me/blog/2019/08/06/juego-memorama-javascript-tutorial/)
 
+Vídeo de YouTube: https://www.youtube.com/watch?v=HuItccEDgyU
+
 Demo: [https://parzibyte.github.io/juego-memorama-js-html5/](https://parzibyte.github.io/juego-memorama-js-html5/)
 
 ![](https://parzibyte.me/blog/wp-content/uploads/2019/08/Juego-de-memorama-en-JavaScript.png)
