@@ -22,15 +22,6 @@ const MAXIMOS_INTENTOS = 8, // Intentos máximos que tiene el jugador
 new Vue({
     el: "#app",
     data: () => ({
-        // La ruta de las imágenes. Puede ser relativa o absoluta
-        imagenes: [
-            "./img/cabra.jpg",
-            "./img/conejo.jpg",
-            "./img/leon.jpg",
-            "./img/oveja.jpg",
-            "./img/perro.jpg",
-            "./img/gato.jpg",
-        ],
         memorama: [],
         // Útiles para saber cuál fue la carta anteriormente seleccionada
         ultimasCoordenadas: {
@@ -68,27 +59,27 @@ new Vue({
         // de mostrarla, se reinicia el juego
         indicarFracaso() {
             Swal.fire({
-                    title: "Perdiste",
-                    html: `
+                title: "Perdiste",
+                html: `
                 <img class="img-fluid" src="./img/perdiste.png" alt="Perdiste">
                 <p class="h4">Agotaste tus intentos</p>`,
-                    confirmButtonText: "Jugar de nuevo",
-                    allowOutsideClick: false,
-                    allowEscapeKey: false,
-                })
+                confirmButtonText: "Jugar de nuevo",
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+            })
                 .then(this.reiniciarJuego)
         },
         // Mostrar alerta de victoria y reiniciar juego
         indicarVictoria() {
             Swal.fire({
-                    title: "¡Ganaste!",
-                    html: `
+                title: "¡Ganaste!",
+                html: `
                 <img class="img-fluid" src="./img/ganaste.png" alt="Ganaste">
                 <p class="h4">Muy bien hecho</p>`,
-                    confirmButtonText: "Jugar de nuevo",
-                    allowOutsideClick: false,
-                    allowEscapeKey: false,
-                })
+                confirmButtonText: "Jugar de nuevo",
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+            })
                 .then(this.reiniciarJuego)
         },
         // Método que indica si el jugador ha ganado
@@ -145,7 +136,7 @@ new Vue({
             // En caso de que la haya encontrado, ¡acierta!
             // Se basta en ultimaImagenSeleccionada
             this.memorama[indiceFila][indiceImagen].mostrar = true;
-            if (imagenSeleccionada.ruta === ultimaImagenSeleccionada.ruta) {
+            if (imagenSeleccionada.ruta === ultimaImagenSeleccionada.par) {
                 this.aciertos++;
                 this.memorama[indiceFila][indiceImagen].acertada = true;
                 this.memorama[this.ultimasCoordenadas.indiceFila][this.ultimasCoordenadas.indiceImagen].acertada = true;
@@ -170,16 +161,80 @@ new Vue({
             }
         },
         reiniciarJuego() {
-            let memorama = [];
-            this.imagenes.forEach((imagen, indice) => {
-                let imagenDeMemorama = {
-                    ruta: imagen,
-                    mostrar: false, // No se muestra la original
-                    acertada: false, // No es acertada al inicio
-                };
-                // Poner dos veces la misma imagen
-                memorama.push(imagenDeMemorama, Object.assign({}, imagenDeMemorama));
-            });
+            let memorama = [
+                {
+                    ruta: "./img/cabra.jpg",
+                    par: "./img/cabra_par.jpg",
+                    mostrar: false,
+                    acertada: false,
+                },
+                {
+                    ruta: "./img/cabra_par.jpg",
+                    par: "./img/cabra.jpg",
+                    mostrar: false,
+                    acertada: false,
+                },
+                {
+                    ruta: "./img/conejo.jpg",
+                    par: "./img/conejo_par.jpg",
+                    mostrar: false,
+                    acertada: false,
+                },
+                {
+                    ruta: "./img/conejo_par.jpg",
+                    par: "./img/conejo.jpg",
+                    mostrar: false,
+                    acertada: false,
+                },
+                {
+                    ruta: "./img/gato.jpg",
+                    par: "./img/gato_par.jpg",
+                    mostrar: false,
+                    acertada: false,
+                },
+                {
+                    ruta: "./img/gato_par.jpg",
+                    par: "./img/gato.jpg",
+                    mostrar: false,
+                    acertada: false,
+                },
+                {
+                    ruta: "./img/leon.jpg",
+                    par: "./img/leon_par.jpg",
+                    mostrar: false,
+                    acertada: false,
+                },
+                {
+                    ruta: "./img/leon_par.jpg",
+                    par: "./img/leon.jpg",
+                    mostrar: false,
+                    acertada: false,
+                },
+                {
+                    ruta: "./img/oveja.jpg",
+                    par: "./img/oveja_par.jpg",
+                    mostrar: false,
+                    acertada: false,
+                },
+                {
+                    ruta: "./img/oveja_par.jpg",
+                    par: "./img/oveja.jpg",
+                    mostrar: false,
+                    acertada: false,
+                },
+                {
+                    ruta: "./img/perro.jpg",
+                    par: "./img/perro_par.jpg",
+                    mostrar: false,
+                    acertada: false,
+                },
+                {
+                    ruta: "./img/perro_par.jpg",
+                    par: "./img/perro.jpg",
+                    mostrar: false,
+                    acertada: false,
+                },
+            ];
 
             // Sacudir o mover arreglo; es decir, hacerlo aleatorio
             this.mezclarArreglo(memorama);
@@ -200,19 +255,32 @@ new Vue({
         precargarImagenes() {
             // Mostrar la alerta
             Swal.fire({
-                    title: "Cargando",
-                    html: `Cargando imágenes...`,
-                    allowOutsideClick: false,
-                    allowEscapeKey: false,
-                })
+                title: "Cargando",
+                html: `Cargando imágenes...`,
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+            })
                 .then(this.reiniciarJuego)
-                // Ponerla en modo carga
+            // Ponerla en modo carga
             Swal.showLoading();
 
 
-            let total = this.imagenes.length,
+            let imagenesPrecarga = [
+                "./img/cabra.jpg",
+                "./img/cabra_par.jpg",
+                "./img/conejo.jpg",
+                "./img/conejo_par.jpg",
+                "./img/gato.jpg",
+                "./img/gato_par.jpg",
+                "./img/leon.jpg",
+                "./img/leon_par.jpg",
+                "./img/oveja.jpg",
+                "./img/oveja_par.jpg",
+                "./img/perro.jpg",
+                "./img/perro_par.jpg",
+            ];
+            let total = imagenesPrecarga.length,
                 contador = 0;
-            let imagenesPrecarga = Array.from(this.imagenes);
             // También vamos a precargar la "espalda" de la tarjeta
             imagenesPrecarga.push(NOMBRE_IMAGEN_OCULTA);
             // Cargamos cada imagen y en el evento load aumentamos el contador
