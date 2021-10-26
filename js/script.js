@@ -16,8 +16,8 @@
     Contacto:   https://parzibyte.me/blog/contacto/
 */
 const PREFIJO_IMAGENES = "./imagenes/", // Como las imágenes se cargan desde un servidor, hay que agregar esto a la ruta
+    NOTA_DEFECTO = 10,// La calificación que tiene al inicio
     TIEMPO_MOSTRAR_SOLUCION = 15000,//En milisegundos
-    MAXIMOS_INTENTOS = 8, // Intentos máximos que tiene el jugador
     COLUMNAS = 4, // Columnas del memorama
     SEGUNDOS_ESPERA_VOLTEAR_IMAGEN = 1, // Por cuántos segundos mostrar ambas imágenes
     NOMBRE_IMAGEN_OCULTA = "./img/question.gif"; // La imagen que se muestra cuando la real está oculta
@@ -36,8 +36,7 @@ new Vue({
             indiceImagen: null,
         },
         NOMBRE_IMAGEN_OCULTA: NOMBRE_IMAGEN_OCULTA,
-        MAXIMOS_INTENTOS: MAXIMOS_INTENTOS,
-        intentos: 0,
+        nota: NOTA_DEFECTO,
         aciertos: 0,
         esperandoTimeout: false,
     }),
@@ -80,7 +79,7 @@ new Vue({
                 allowOutsideClick: false,
                 allowEscapeKey: false,
             })
-                .then(this.reiniciarJuego)
+                .then(() => { window.location.reload() });
         },
         // Mostrar alerta de victoria y reiniciar juego
         indicarVictoria() {
@@ -93,7 +92,7 @@ new Vue({
                 allowOutsideClick: false,
                 allowEscapeKey: false,
             })
-                .then(this.reiniciarJuego)
+                .then(() => { window.location.reload() });
         },
         // Método que indica si el jugador ha ganado
         haGanado() {
@@ -112,8 +111,8 @@ new Vue({
         },
         // Aumenta un intento y verifica si el jugador ha perdido
         aumentarIntento() {
-            this.intentos++;
-            if (this.intentos >= MAXIMOS_INTENTOS) {
+            this.nota--;
+            if (this.nota <= 0) {
                 this.indicarFracaso();
             }
         },
@@ -197,7 +196,7 @@ new Vue({
                 memoramaDividido.push(memorama.slice(i, i + COLUMNAS));
             }
             // Reiniciar intentos
-            this.intentos = 0;
+            this.nota = NOTA_DEFECTO;
             this.aciertos = 0;
             // Asignar a instancia de Vue para que lo dibuje
             this.memorama = memoramaDividido;
