@@ -16,6 +16,7 @@
     Contacto:   https://parzibyte.me/blog/contacto/
 */
 const PREFIJO_IMAGENES = "./imagenes/", // Como las imágenes se cargan desde un servidor, hay que agregar esto a la ruta
+    TIEMPO_MOSTRAR_SOLUCION = 15000,//En milisegundos
     MAXIMOS_INTENTOS = 8, // Intentos máximos que tiene el jugador
     COLUMNAS = 4, // Columnas del memorama
     SEGUNDOS_ESPERA_VOLTEAR_IMAGEN = 1, // Por cuántos segundos mostrar ambas imágenes
@@ -23,6 +24,7 @@ const PREFIJO_IMAGENES = "./imagenes/", // Como las imágenes se cargan desde un
 new Vue({
     el: "#app",
     data: () => ({
+        puedeJugar: true,// Cuando se muestra la solución, no se puede jugar
         // La ruta de las imágenes. Puede ser relativa o absoluta
         imagenes: [
             // No hay nada, se cargan desde el script de PHP
@@ -117,6 +119,9 @@ new Vue({
         },
         // Se desencadena cuando se hace click en la imagen
         voltear(indiceFila, indiceImagen) {
+            if (!this.puedeJugar) {
+                return;
+            }
             // Si se está regresando una imagen a su estado original, detener flujo
             if (this.esperandoTimeout) {
                 return;
@@ -196,6 +201,8 @@ new Vue({
             this.aciertos = 0;
             // Asignar a instancia de Vue para que lo dibuje
             this.memorama = memoramaDividido;
+            // Mostrar imágenes por 15 segundos
+            this.mostrarSolucionPorUnMomento();
         },
         // Método que precarga las imágenes para que las mismas ya estén cargadas
         // cuando el usuario gire la tarjeta
@@ -234,6 +241,22 @@ new Vue({
                 document.body.appendChild(imagen);
                 document.body.removeChild(imagen);
             });
+        },
+        mostrarSolucionPorUnMomento() {
+            this.puedeJugar = false;
+            for (const fila of this.memorama) {
+                for (const imagen of fila) {
+                    imagen.mostrar = true;
+                }
+            }
+            setTimeout(() => {
+                for (const fila of this.memorama) {
+                    for (const imagen of fila) {
+                        imagen.mostrar = false;
+                    }
+                }
+                this.puedeJugar = true;
+            }, TIEMPO_MOSTRAR_SOLUCION);
         },
     },
     async mounted() {
