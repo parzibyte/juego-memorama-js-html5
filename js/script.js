@@ -40,19 +40,11 @@ new Vue({
         esperandoTimeout: false,
     }),
     methods: {
-        mezclarArreglo(arreglo) {
-            for (let i = arreglo.length - 1; i > 0; i--) {
-                let indiceAleatorio = Math.floor(Math.random() * (i + 1));
-                let temporal = arreglo[i];
-                arreglo[i] = arreglo[indiceAleatorio];
-                arreglo[indiceAleatorio] = temporal;
-            }
-        },
         async obtenerListaDeImagenes() {
             let imagenes = await (await fetch("./imagenes/lista.php")).json();
             imagenes = imagenes.map(imagen => PREFIJO_IMAGENES + imagen);
             this.mezclarArreglo(imagenes);
-            this.imagenes = imagenes.slice(0, 7);
+            this.imagenes = imagenes.slice(0, 8);
         },
         mostrarCreditos() {
             Swal.fire({
