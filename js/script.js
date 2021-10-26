@@ -15,7 +15,8 @@
     Ayuda:      https://parzibyte.me/blog/contrataciones-ayuda/
     Contacto:   https://parzibyte.me/blog/contacto/
 */
-const MAXIMOS_INTENTOS = 8, // Intentos máximos que tiene el jugador
+const PREFIJO_IMAGENES = "./imagenes/", // Como las imágenes se cargan desde un servidor, hay que agregar esto a la ruta
+    MAXIMOS_INTENTOS = 8, // Intentos máximos que tiene el jugador
     COLUMNAS = 4, // Columnas del memorama
     SEGUNDOS_ESPERA_VOLTEAR_IMAGEN = 1, // Por cuántos segundos mostrar ambas imágenes
     NOMBRE_IMAGEN_OCULTA = "./img/question.png"; // La imagen que se muestra cuando la real está oculta
@@ -24,12 +25,7 @@ new Vue({
     data: () => ({
         // La ruta de las imágenes. Puede ser relativa o absoluta
         imagenes: [
-            "./img/cabra.jpg",
-            "./img/conejo.jpg",
-            "./img/leon.jpg",
-            "./img/oveja.jpg",
-            "./img/perro.jpg",
-            "./img/gato.jpg",
+            // No hay nada, se cargan desde el script de PHP
         ],
         memorama: [],
         // Útiles para saber cuál fue la carta anteriormente seleccionada
@@ -44,6 +40,20 @@ new Vue({
         esperandoTimeout: false,
     }),
     methods: {
+        mezclarArreglo(arreglo) {
+            for (let i = arreglo.length - 1; i > 0; i--) {
+                let indiceAleatorio = Math.floor(Math.random() * (i + 1));
+                let temporal = arreglo[i];
+                arreglo[i] = arreglo[indiceAleatorio];
+                arreglo[indiceAleatorio] = temporal;
+            }
+        },
+        async obtenerListaDeImagenes() {
+            let imagenes = await (await fetch("./imagenes/lista.php")).json();
+            imagenes = imagenes.map(imagen => PREFIJO_IMAGENES + imagen);
+            this.mezclarArreglo(imagenes);
+            this.imagenes = imagenes.slice(0, 7);
+        },
         mostrarCreditos() {
             Swal.fire({
                 title: "Acerca de",
@@ -68,27 +78,27 @@ new Vue({
         // de mostrarla, se reinicia el juego
         indicarFracaso() {
             Swal.fire({
-                    title: "Perdiste",
-                    html: `
+                title: "Perdiste",
+                html: `
                 <img class="img-fluid" src="./img/perdiste.png" alt="Perdiste">
                 <p class="h4">Agotaste tus intentos</p>`,
-                    confirmButtonText: "Jugar de nuevo",
-                    allowOutsideClick: false,
-                    allowEscapeKey: false,
-                })
+                confirmButtonText: "Jugar de nuevo",
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+            })
                 .then(this.reiniciarJuego)
         },
         // Mostrar alerta de victoria y reiniciar juego
         indicarVictoria() {
             Swal.fire({
-                    title: "¡Ganaste!",
-                    html: `
+                title: "¡Ganaste!",
+                html: `
                 <img class="img-fluid" src="./img/ganaste.png" alt="Ganaste">
                 <p class="h4">Muy bien hecho</p>`,
-                    confirmButtonText: "Jugar de nuevo",
-                    allowOutsideClick: false,
-                    allowEscapeKey: false,
-                })
+                confirmButtonText: "Jugar de nuevo",
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+            })
                 .then(this.reiniciarJuego)
         },
         // Método que indica si el jugador ha ganado
@@ -200,13 +210,13 @@ new Vue({
         precargarImagenes() {
             // Mostrar la alerta
             Swal.fire({
-                    title: "Cargando",
-                    html: `Cargando imágenes...`,
-                    allowOutsideClick: false,
-                    allowEscapeKey: false,
-                })
+                title: "Cargando",
+                html: `Cargando imágenes...`,
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+            })
                 .then(this.reiniciarJuego)
-                // Ponerla en modo carga
+            // Ponerla en modo carga
             Swal.showLoading();
 
 
@@ -234,7 +244,8 @@ new Vue({
             });
         },
     },
-    mounted() {
+    async mounted() {
+        await this.obtenerListaDeImagenes();
         this.precargarImagenes();
     },
 });
